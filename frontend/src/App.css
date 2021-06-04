@@ -1,0 +1,21 @@
+.App {
+  text-align: center;
+}
+
+.note-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.note-form input {
+  width: 300px;
+  height: 60px;
+  margin: 10px;
+  font-size: 25px;
+}
+
+.note-form label {
+  font-size: 40px;
+}
