@@ -1,9 +1,44 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react';
 
 function MyNotes() {
+
+    const [notes, setNotes] = useState([]);
+
+    const getNotes = async () => {
+        try {
+
+            const response = await fetch("http://localhost:3001/notes"); // takes time to fetch data so we await
+
+            const jsonData = await response.json(); // takes time to parse data so we await
+
+            //console.log(jsonData[0].note_content)
+            setNotes(jsonData);
+
+            //console.log("retrieving notes");
+            
+            
+            
+        } catch (error) {
+            console.error(error.message);
+            
+        }
+    }
+
+    useEffect(() => {
+        getNotes();
+    }, [])
+
+    console.log(notes);
+
+
     return (
         <div>
-            
+            <h1>All my Notes</h1>
+            <ul>
+                {notes.map(note => (
+                    <li key = {note.note_id}>{note.note_content}</li>
+                ))}
+            </ul>
         </div>
     )
 }

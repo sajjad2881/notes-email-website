@@ -4,11 +4,6 @@ const cors = require("cors");
 const app = express();
 const pool = require("./db");
 
-// var corsOptions = {
-//   origin: "http://localhost:3001"
-// }
-
-// app.use(cors(corsOptions));
 
 app.use(cors());
 app.use(express.json()); // lets us add req.body
@@ -18,19 +13,36 @@ app.use(express.json()); // lets us add req.body
 
 // create a note
 
+// app.post("/notes", async (req, res) => {
+//   try {
+    
+//     const { email, note_content, private_or_community, date_time_created } = req.body;
+//     const newNote = await pool.query(
+//       "INSERT INTO notes (email, note_content, private_or_community, date_time_created) VALUES($1) RETURNING *",
+//       [email, note_content, private_or_community, date_time_created]
+//     );
+
+//     res.json(newNote.rows[0]);
+
+//   } catch (error) {
+//     console.error(error.message);
+//   }
+// })
+
 app.post("/notes", async (req, res) => {
   try {
     
-    const { email, note_content, private_or_community, date_time_created } = req.body;
+    const { content } = req.body;
     const newNote = await pool.query(
-      "INSERT INTO notes (email, note_content, private_or_community, date_time_created) VALUES($1) RETURNING *",
-      [email, note_content, private_or_community, date_time_created]
+      "INSERT INTO notes (note_content, email, private_or_community) VALUES($1, $2, $3) RETURNING *",
+      [content, "ileghari1@gmail.com", true]
     );
 
     res.json(newNote.rows[0]);
 
   } catch (error) {
     console.error(error.message);
+    console.log("here");
   }
 })
 
@@ -50,8 +62,37 @@ app.get("/notes", async (req, res) => {
 
 // update a note ??
 
+app.put("/notes/:id", async (req, res) => {
+  try {
+    
+    const {note_id} = req.params;
+    const {note_content} = req.body;
+    const updateNote = await pool.query("UPDATE notes SET note_content = $1 WHERE note_id = $2",
+      [note_content, note_id]
+    );
+
+    res.json("Note was updated")
+
+  } catch (error) {
+    console.error(error.message);
+  }
+})
+
 // delete a note 
 
+app.delete("/notes/:id", async (req, res) => {
+  try {
+
+    const { note_id } = req.params;
+    const deleteNote = await pool.query("DELETE FROM notes WHERE note_id = $1", [note_id]);
+
+    res.json("Note was deleted")
+     
+  } catch (error) {
+    console.error(error.message);
+
+  }
+})
 
 
 
