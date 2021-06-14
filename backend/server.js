@@ -3,31 +3,18 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const app = express();
 const pool = require("./db");
-
+const nodemailer = require("nodemailer");
+require("dotenv").config();
 
 app.use(cors());
 app.use(express.json()); // lets us add req.body
 
 
+
+
 //ROUTES 
 
 // create a note
-
-// app.post("/notes", async (req, res) => {
-//   try {
-    
-//     const { email, note_content, private_or_community, date_time_created } = req.body;
-//     const newNote = await pool.query(
-//       "INSERT INTO notes (email, note_content, private_or_community, date_time_created) VALUES($1) RETURNING *",
-//       [email, note_content, private_or_community, date_time_created]
-//     );
-
-//     res.json(newNote.rows[0]);
-
-//   } catch (error) {
-//     console.error(error.message);
-//   }
-// })
 
 app.post("/notes", async (req, res) => {
   try {
@@ -65,10 +52,10 @@ app.get("/notes", async (req, res) => {
 app.put("/notes/:id", async (req, res) => {
   try {
     
-    const {note_id} = req.params;
+    const {id} = req.params;
     const {note_content} = req.body;
     const updateNote = await pool.query("UPDATE notes SET note_content = $1 WHERE note_id = $2",
-      [note_content, note_id]
+      [note_content, id]
     );
 
     res.json("Note was updated")
@@ -83,8 +70,8 @@ app.put("/notes/:id", async (req, res) => {
 app.delete("/notes/:id", async (req, res) => {
   try {
 
-    const { note_id } = req.params;
-    const deleteNote = await pool.query("DELETE FROM notes WHERE note_id = $1", [note_id]);
+    const { id } = req.params;
+    const deleteNote = await pool.query("DELETE FROM notes WHERE note_id = $1", [id]);
 
     res.json("Note was deleted")
      
@@ -96,24 +83,41 @@ app.delete("/notes/:id", async (req, res) => {
 
 
 
+//sending an email 
 
 
+app.post("/send-mail", cors(), async (req, res) => {
+  let {text} = req.body;
+  const transport = nodemailer.createTransport({
+    host: process.env.MAIL_HOST,
+    port: process.env.MAIL_PORT,
+    auth: {
+      user: process.env.MAIL_USER, 
+      pass: process.env.MAIL_PASS
+    }
+  })
 
+  await transport.sendMail({
+    from: process.env.MAIL_FROM,
+    to: "ileghari@wesleyan.edu",
+    subject: "test email",
+    html: `<div className="email" style="
+    border: 1px solid black;
+    padding: 20px;
+    font-family: sans-serif;
+    line-height: 2;
+    font-size: 20px;
+    ">
+    <h2>Here is your test email!</h2>
+    <p>${text}</p>
 
+    <p>All the best</p>
+      </div>
+  `
+  })
 
+})
 
-// app.use(bodyParser.json());
-
-// app.use(bodyParser.urlencoded({ extended: true }));
-
-// const db = require("./models");
-// db.sequelize.sync();
-
-
-//simple route for test
-// app.get("/", (req, res) => {
-//     res.json({ message: "Hello from backend!" });
-//   });
 
 
 // set port, listen on port 3001 for incoming requests

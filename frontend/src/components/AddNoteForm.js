@@ -4,7 +4,7 @@ function AddNoteForm() {
 
     const [content, setContent] = useState("");
 
-    const handleSubmit = async (e ) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         try {
             const body = {content};

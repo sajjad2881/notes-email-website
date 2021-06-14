@@ -1,8 +1,8 @@
 import './App.css';
-import Example from './components/Example';
 import Welcome from './components/Welcome';
 import AddNoteForm from './components/AddNoteForm';
 import MyNotes from './components/MyNotes';
+import SendEmail from './components/SendEmail';
 
 function App() {
   return (
@@ -10,6 +10,7 @@ function App() {
       <Welcome /> 
       <AddNoteForm />
       <MyNotes />
+      <SendEmail />
 
       {/* {!loggedIn ? <> : <LogInForm />}
       

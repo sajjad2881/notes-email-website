@@ -3,6 +3,14 @@ import React, {useEffect, useState} from 'react';
 function MyNotes() {
 
     const [notes, setNotes] = useState([]);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [sortValue, setSortValue] = useState('');
+
+    const handleSelectChange = event => {
+        const value = event.target.value;
+        setSortValue(value);
+    }
+
 
     const getNotes = async () => {
         try {
@@ -17,7 +25,6 @@ function MyNotes() {
             //console.log("retrieving notes");
             
             
-            
         } catch (error) {
             console.error(error.message);
             
@@ -28,15 +35,52 @@ function MyNotes() {
         getNotes();
     }, [])
 
-    console.log(notes);
+
+    // deleting notes function
+
+    const deleteNote =  async (id) => {
+        try {
+
+            const deleteNote = await fetch(`http://localhost:3001/notes/${id}/`, {
+                method: 'DELETE',
+            });
+            //console.log("deleted");
+            //console.log(deleteNote);
+
+            // updates list to exclude deleted notes
+            setNotes(notes.filter(note => note.note_id !== id))
+            
+        } catch (err) {
+            console.error(err.message);
+        }
+    }
+
 
 
     return (
-        <div>
+        <div className = 'container'>
             <h1>All my Notes</h1>
-            <ul>
-                {notes.map(note => (
-                    <li key = {note.note_id}>{note.note_content}</li>
+            <input type = "text" className = "search-bar" placeholder = "Search by Note title or Tag Name" onChange = {(e) => {setSearchTerm(e.target.value)}} />
+
+            {/* add a filter by category method */}
+
+            <ul className = 'list-container'>
+                {notes.filter(note => {
+                    if (searchTerm == "") {
+                        return note
+                    } else if (note.note_content.toLowerCase().includes(searchTerm.toLowerCase())) { // use an or case that includes tag name as well
+                        return note
+                    }
+                })
+                .map(note => (
+                    <li key = {note.note_id} className = 'notes-list'>
+                        <button className = 'note-title-button'>{note.note_content}</button>
+                        <div className = "align-right">
+                            <button className = "note-update-button" >Edit</button> 
+                            <button className = "note-delete-button" onClick = {() => deleteNote(note.note_id)}>Delete</button>
+                        </div> 
+                    </li>
+                   
                 ))}
             </ul>
         </div>
