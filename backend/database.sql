@@ -11,7 +11,7 @@ CREATE TABLE notes(
     email VARCHAR(320) NOT NULL,
     note_content TEXT, 
     private_or_community BOOLEAN NOT NULL,
-    date_time_created TIMESTAMP NOT NULL
+    -- date_time_created TIMESTAMP NOT NULL
 );
 
 CREATE TABLE email(
@@ -19,3 +19,8 @@ CREATE TABLE email(
     used_previously BOOLEAN NOT NULL,
     date_time_email_sent TIMESTAMP NOT NULL
 );
+
+ALTER TABLE notes 
+ADD COLUMN note_title VARCHAR(320) NOT NULL, 
+ADD COLUMN tag VARCHAR(255), 
+ADD COLUMN no_of_times_emailed INT;

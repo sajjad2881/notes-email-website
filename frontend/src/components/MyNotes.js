@@ -4,12 +4,6 @@ function MyNotes() {
 
     const [notes, setNotes] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
-    const [sortValue, setSortValue] = useState('');
-
-    const handleSelectChange = event => {
-        const value = event.target.value;
-        setSortValue(value);
-    }
 
 
     const getNotes = async () => {
@@ -62,19 +56,17 @@ function MyNotes() {
             <h1>All my Notes</h1>
             <input type = "text" className = "search-bar" placeholder = "Search by Note title or Tag Name" onChange = {(e) => {setSearchTerm(e.target.value)}} />
 
-            {/* add a filter by category method */}
-
             <ul className = 'list-container'>
                 {notes.filter(note => {
                     if (searchTerm == "") {
                         return note
-                    } else if (note.note_content.toLowerCase().includes(searchTerm.toLowerCase())) { // use an or case that includes tag name as well
+                    } else if (note.note_title.toLowerCase().includes(searchTerm.toLowerCase()) || note.tag.toLowerCase().includes(searchTerm.toLowerCase())) { // use an OR case that includes tag name as well
                         return note
                     }
                 })
                 .map(note => (
                     <li key = {note.note_id} className = 'notes-list'>
-                        <button className = 'note-title-button'>{note.note_content}</button>
+                        <button className = 'note-title-button'>{note.note_title}</button>
                         <div className = "align-right">
                             <button className = "note-update-button" >Edit</button> 
                             <button className = "note-delete-button" onClick = {() => deleteNote(note.note_id)}>Delete</button>

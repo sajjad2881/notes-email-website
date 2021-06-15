@@ -19,10 +19,11 @@ app.use(express.json()); // lets us add req.body
 app.post("/notes", async (req, res) => {
   try {
     
-    const { content } = req.body;
+    const { info } = req.body;
+    console.log(info);
     const newNote = await pool.query(
-      "INSERT INTO notes (note_content, email, private_or_community) VALUES($1, $2, $3) RETURNING *",
-      [content, "ileghari1@gmail.com", true]
+      "INSERT INTO notes (note_title, note_content, email, private_or_community, tag) VALUES($1, $2, $3, $4, $5) RETURNING *",
+      [info.note_title, info.note_content, "ileghari1@gmail.com", info.private_or_community, 'productivity']
     );
 
     res.json(newNote.rows[0]);
