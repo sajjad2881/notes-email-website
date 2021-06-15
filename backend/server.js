@@ -2,14 +2,33 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const app = express();
-const pool = require("./db");
+///const pool = require("./db");
 const nodemailer = require("nodemailer");
 require("dotenv").config();
 
 app.use(cors());
 app.use(express.json()); // lets us add req.body
 
+const { Pool } = require('pg');
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false
+  }
+});
 
+app.get('/db', async (req, res) => {
+  try {
+    const client = await pool.connect();
+    const result = await client.query('SELECT * FROM test_table');
+    const results = { 'results': (result) ? result.rows : null};
+    res.render('pages/db', results );
+    client.release();
+  } catch (err) {
+    console.error(err);
+    res.send("Error " + err);
+  }
+})
 
 
 //ROUTES 
@@ -124,6 +143,11 @@ app.post("/send-mail", cors(), async (req, res) => {
 // set port, listen on port 3001 for incoming requests
 const PORT = process.env.PORT || 3001;
 
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static('frontend/build'))
+}
+
 app.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
 });
+

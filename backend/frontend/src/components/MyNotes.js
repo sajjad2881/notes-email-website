@@ -9,7 +9,7 @@ function MyNotes() {
     const getNotes = async () => {
         try {
 
-            const response = await fetch("http://localhost:3001/notes"); // takes time to fetch data so we await
+            const response = await fetch("https://notesmailfulls.herokuapp.com/notes"); // takes time to fetch data so we await
 
             const jsonData = await response.json(); // takes time to parse data so we await
 
@@ -35,7 +35,7 @@ function MyNotes() {
     const deleteNote =  async (id) => {
         try {
 
-            const deleteNote = await fetch(`http://localhost:3001/notes/${id}/`, {
+            const deleteNote = await fetch(`https://notesmailfulls.herokuapp.com/notes/${id}/`, {
                 method: 'DELETE',
             });
             //console.log("deleted");

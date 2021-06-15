@@ -26,12 +26,13 @@ function AddNoteForm() {
         try {
             const body = {info};
 
-            const response = await fetch("http://localhost:3001/notes", {
+            console.log(info);
+            const response = await fetch("https://notesmailfulls.herokuapp.com/notes", {
                 method: "POST",
                 headers: { "Content-Type": "application/json"},
                 body: JSON.stringify(body)
             });
-
+            console.log(info);
             window.location = "/";
             
         } catch (error) {

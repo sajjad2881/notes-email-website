@@ -7,7 +7,7 @@ function SendEmail() {
 
     const handleSend = async() => {
         try {
-            await axios.post("http://localhost:3001/send-mail", {
+            await axios.post("https://notesmailfulls.herokuapp.com/send-mail", {
                 text
             })
 
