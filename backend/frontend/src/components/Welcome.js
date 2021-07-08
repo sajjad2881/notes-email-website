@@ -3,10 +3,10 @@ import React from 'react'
 function Welcome() {
     return (
         <div>
-            <h1>Welcome to our App</h1>
+            <h1>Welcome to our Appp</h1>
             <h2>Newsletter for you. By you</h2>
-            <h3>functionality</h3>
-            <h4>Security info/warnings</h4>
+            <h3>Press here to check the functionality</h3>
+            <h4>Put the Security info/warnings</h4>
         </div>
     )
 }

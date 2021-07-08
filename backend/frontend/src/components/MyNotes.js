@@ -53,7 +53,7 @@ function MyNotes() {
 
     return (
         <div className = 'container'>
-            <h1>All my Notes</h1>
+            <h1>All my Notes here</h1>
             <input type = "text" className = "search-bar" placeholder = "Search by Note title or Tag Name" onChange = {(e) => {setSearchTerm(e.target.value)}} />
 
             <ul className = 'list-container'>
